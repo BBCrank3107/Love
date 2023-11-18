@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        #heart {
+            cursor: pointer;
+            width: 500px;
+            height: 500px;
+            background: url('heart.png') no-repeat center center;
+            background-size: contain;
+            position: relative;
+            animation: floatUpDown 6s infinite alternate linear;
+        }
+
+        #heartText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.5;
+        }
+
+        #message {
+            text-align: center;
+            display: none;
+            font-size: 1px;
+            margin-top: 20px;
+            color: red;
+            font-weight: bold;
+            animation: showMessage 5s ease-in-out forwards, fadein 10s;
+        }
+
+        .floating-heart {
+            margin-top: 800px;
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: url('heart.png') no-repeat center center;
+            background-size: contain;
+            animation: float 4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        @keyframes showMessage {
+            to {
+                font-size: 80px;
+            }
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            to {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatUpDown {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5vh);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="heart" onclick="showMessage()">
+        <span id="heartText">
+            Bấm vào tôi<br>
+            sẽ có bất ngờ cho bạn
+        </span>
+    </div>
+    <div id="message">
+        <p>Chúc em 20/11 vui vẻ!</p>
+        <p>❤️❤️❤️I LOVE YOU❤️❤️❤️</p>
+    </div>
+
+    <script>
+        function showMessage() {
+            document.getElementById("heartText").innerText = "";
+
+            setTimeout(function () {
+                appendTextSequentially("Em à!\nAnh muốn nói rằng", 0);
+            }, 1000);
+
+            setTimeout(function () {
+                document.getElementById("heart").style.display = "none";
+                document.getElementById("message").style.display = "block";
+                for (let i = 0; i < 500; i++) {
+                    createFloatingHeart();
+                }
+            }, 5000);
+        }
+
+        function appendTextSequentially(text, index) {
+            const heartText = document.getElementById("heartText");
+            heartText.innerText = text.substring(0, index);
+
+            if (index < text.length) {
+                setTimeout(function () {
+                    appendTextSequentially(text, index + 1);
+                }, 50);
+            }
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            document.body.appendChild(heart);
+
+            const randomX = Math.random() * window.innerWidth;
+            heart.style.left = `${randomX}px`;
+
+            const randomDelay = Math.random() * 5;
+            heart.style.animationDelay = `-${randomDelay}s`;
+
+            const animationDuration = 4;
+            setTimeout(() => {
+                heart.remove();
+            }, (animationDuration + randomDelay) * 1000);
+
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+            });
+        }
+    </script>
+</body>
+
+</html>
